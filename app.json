@@ -24,6 +24,9 @@
     },
     "plugins": [
       "expo-router",
+      {
+        "origin": "https://galaxies.dev/"
+      },
       [
         "expo-splash-screen",
         {
@@ -33,7 +36,13 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(AI Voice Recorder) to access your microphone."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
