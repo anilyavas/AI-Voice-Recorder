@@ -32,8 +32,18 @@ export default function Index() {
       console.log(error);
     }
   };
-  const stopRecording = () => {
-    console.log('stopRecording');
+  const stopRecording = async () => {
+    if (!recording) {
+      return;
+    }
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+    console.log('stopRecording', uri);
+    setRecording(undefined);
+
+    if (uri) {
+      router.push(`/new-recording?uri=${encodeURIComponent(uri)}`);
+    }
   };
 
   return (
