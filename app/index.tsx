@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import { Audio } from 'expo-av';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,8 +10,27 @@ export default function Index() {
   const router = useRouter();
   const { bottom } = useSafeAreaInsets();
 
-  const startRecording = () => {
-    console.log('startRecording');
+  const startRecording = async () => {
+    try {
+      console.log('Requesting permissions..');
+      const permissionResponse = await Audio.requestPermissionsAsync();
+
+      if (permissionResponse.status !== 'granted') {
+        Alert.alert('Permission not granted');
+        return;
+      }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const stopRecording = () => {
     console.log('stopRecording');
