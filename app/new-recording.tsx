@@ -16,22 +16,27 @@ export default function Page() {
 
   const handleTranscribe = async () => {
     setIsLoading(true);
-    toast.loading('Transcribing...');
+    toast.loading('Loading...');
     try {
       const formData = new FormData();
-      const audioData = { uri, name: 'audio.m4a', type: 'audio/m4a' };
+      const audioData = {
+        uri,
+        type: 'audio/m4a',
+        name: 'audio.m4a',
+      };
+
       formData.append('file', audioData as unknown as Blob);
 
       const response = await fetch('/api/speech-to-text', {
         method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
         body: formData,
-      }).then((res) => res.json());
-      console.log(response);
-      setTranscription(response.text);
+      }).then((response) => response.json());
+      setTranscription(response.text || 'No transcription available');
     } catch (error) {
-      console.log(error);
-      toast.error('Failed to transcribe audio');
+      console.error('Error transcribing audio:', error);
     } finally {
       setIsLoading(false);
       toast.dismiss();
