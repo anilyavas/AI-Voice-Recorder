@@ -16,7 +16,7 @@ export default function Page() {
 
   const handleTranscribe = async () => {
     setIsLoading(true);
-    toast.loading('Loading...');
+    toast.loading('Transcribing...');
     try {
       const formData = new FormData();
       const audioData = {
